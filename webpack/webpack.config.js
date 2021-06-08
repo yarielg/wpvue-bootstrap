@@ -1,6 +1,7 @@
 const path = require('path');
 const loaders = require('./loaders');
 const plugins = require('./plugins');
+const TerserPlugin = require('terser-webpack-plugin');
 
 const isDev =  (process.env.NODE_ENV = 'development');
 
@@ -14,6 +15,10 @@ module.exports = {
         rules:loaders,
     },
     plugins:plugins,
+	optimization: {
+		minimize: true,
+		minimizer: [new TerserPlugin()],
+	},
     output:{
         path: path.resolve(__dirname,'../dist'),
         filename: '[name].js'

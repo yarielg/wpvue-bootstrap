@@ -1,80 +1,103 @@
 <template>
+  <v-app id="inspire">
+    <!-- mini-variant prop on drawer -->
+    <v-navigation-drawer
+      dark
+      src="https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg"
+      width="250px"
+      permanent
+      app
+      class="pt-4"
+      color="grey lighten-3"
+    >
+      <v-list>
+        <v-list-item
+          v-for="([icon, text,component], i) in items"
+          :key="i"
+          link
+        @click="showComponent(component)">
+          <v-list-item-icon>
+            <v-icon>{{ icon }}</v-icon>
+          </v-list-item-icon>
 
-        <v-app>
-                <Hello></Hello>
-                <v-card>
-                        <v-toolbar
-                                color="cyan"
-                                dark
-                                flat
-                        >
-                                <v-app-bar-nav-icon></v-app-bar-nav-icon>
+          <v-list-item-content>
+            <v-list-item-title>{{ text }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
 
-                                <v-toolbar-title>Your Dashboard</v-toolbar-title>
+      <template v-slot:append>
+        <div class="pa-2">
+          <v-btn @click="goToWordpress" block>
+            Wordpress Dashboard
+          </v-btn>
+        </div>
+      </template>
+    </v-navigation-drawer>
 
-                                <v-spacer></v-spacer>
+    <v-main>
 
-                                <v-btn icon>
-                                        <v-icon>mdi-magnify</v-icon>
-                                </v-btn>
+      <v-container>
 
-                                <v-btn icon>
-                                        <v-icon>mdi-dots-vertical</v-icon>
-                                </v-btn>
+        <div v-if="activeComponent == 'badges'">
+          <badges @showBadge="showBadgeHandler"></badges>
+        </div>
 
-                                <template v-slot:extension>
-                                        <v-tabs
-                                                v-model="tab"
-                                                align-with-title
-                                        >
-                                                <v-tabs-slider color="yellow"></v-tabs-slider>
+        <div v-if="activeComponent == 'new-badge'">
+          <new-badge></new-badge>
+        </div>
 
-                                                <v-tab
-                                                        v-for="item in items"
-                                                        :key="item"
-                                                >
-                                                        {{ item }}
-                                                </v-tab>
-                                        </v-tabs>
-                                </template>
-                        </v-toolbar>
+      </v-container>
 
-                        <v-tabs-items v-model="tab">
-                                <v-tab-item
-                                        v-for="item in items"
-                                        :key="item"
-                                >
-                                        <v-card flat>
-                                                <v-card-text v-text="text"></v-card-text>
-                                        </v-card>
-                                </v-tab-item>
-                        </v-tabs-items>
-                </v-card>
-        </v-app>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
+  const axios = require('axios');
+  import $ from 'jquery';
 
-        import Hello from "./Hello.vue";
+  export default {
+    components: {
+    },
+    data () {
+      return {
+        sharedData: sharedData,
+        items: [
+          ['mdi-shield', 'Badges','badges'],
+          ['mdi-shield-plus', 'New Badge','new-badge'],
+          ['mdi-cogs', 'Settings','settings'],
+        ],
+        dialog: false,
+        activeComponent: 'badges'
+      }
+    },
+    mounted() {
 
-        export default {
-                components:{
-                        Hello
-                },
-                data () {
-                        return {
-                                tab: null,
-                                items: [
-                                        'web', 'shopping', 'videos', 'images', 'news',
-                                ],
-                                text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                        }
-                },
-        }
+    },
+    methods:{
+      loadDefaults(){
+        $('#vwp-plugin-loading').css('display','none');
+      },
+
+      goToWordpress(){
+        window.location.replace("/wp-admin");
+      },
+      showComponent(component){
+        this.activeComponent = component;
+      },
+      showBadgeHandler(){
+        console.log('asdasdasdasdasd');
+      }
+    },
+    created() {
+       this.loadDefaults()
+    },
+
+
+  }
 </script>
 
 <style scoped>
-        .v-progress-circular {
-                margin: 1rem;
-        }
+
 </style>
